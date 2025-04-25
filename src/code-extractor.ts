@@ -19,13 +19,16 @@ export default class CodeExtractor {
       highlightLine > codeLines.length
     ) {
       throw new Error(
-        `highlightLine=${highlightLine} is invalid for file with ${codeLines.length} lines`
+        `highlightLine=${highlightLine} is invalid for file with ${codeLines.length} lines`,
       );
     }
 
     const zeroBasedHighlight = highlightLine - 1;
     const start = Math.max(0, zeroBasedHighlight - this.codeLineOffset);
-    const end = Math.min(codeLines.length, zeroBasedHighlight + this.codeLineOffset + 1);
+    const end = Math.min(
+      codeLines.length,
+      zeroBasedHighlight + this.codeLineOffset + 1,
+    );
     const snippetLines = codeLines.slice(start, end);
 
     if (!snippetLines.length) {
@@ -38,4 +41,4 @@ export default class CodeExtractor {
       snippetLines,
     };
   }
-};
+}

@@ -41,7 +41,8 @@ export default class ErrorHandler {
 
     const highlightLine = stackLines[0].line ?? 1;
 
-    const { snippet, decorationLine, snippetLines } = this.codeExtractor.extract(path, highlightLine);
+    const { snippet, decorationLine, snippetLines } = this.codeExtractor
+      .extract(path, highlightLine);
 
     const code = await this.codeHighlighter.highlightCode(
       snippet,
@@ -49,7 +50,8 @@ export default class ErrorHandler {
       decorationLine,
     );
 
-    const templatePath = new URL("../templates/development.vto", import.meta.url).pathname;
+    const templatePath =
+      new URL("../templates/development.vto", import.meta.url).pathname;
 
     const template = await this.templateRenderer.render(templatePath, {
       code,

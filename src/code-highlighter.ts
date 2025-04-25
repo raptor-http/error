@@ -1,7 +1,11 @@
 import { codeToHtml } from "npm:shiki";
 
 export default class CodeHighlighter {
-  async highlightCode(snippet: string, snippetLines: string[], decorationLine: number): Promise<string> {
+  async highlightCode(
+    snippet: string,
+    snippetLines: string[],
+    decorationLine: number,
+  ): Promise<string> {
     if (!snippet || !snippetLines || snippetLines.length === 0) {
       throw new Error("Cannot highlight empty snippet");
     }
@@ -11,7 +15,7 @@ export default class CodeHighlighter {
       decorationLine >= snippetLines.length
     ) {
       throw new Error(
-        `Decoration line is out of bounds: ${decorationLine} (snippet has ${snippetLines.length} lines)`
+        `Decoration line is out of bounds: ${decorationLine} (snippet has ${snippetLines.length} lines)`,
       );
     }
 
@@ -32,4 +36,4 @@ export default class CodeHighlighter {
       decorations,
     });
   }
-};
+}

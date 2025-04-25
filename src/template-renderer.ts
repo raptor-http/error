@@ -18,4 +18,4 @@ export default class TemplateRenderer {
 
     return await this.templating.runString(html, context);
   }
-};
+}
