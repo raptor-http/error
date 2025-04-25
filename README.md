@@ -43,6 +43,8 @@ import { Kernel, Context } from "jsr:@raptor/framework";
 
 const app = new Kernel();
 
+app.add(() => "Hello, Dr Malcolm!");
+
 app.catch(new ErrorHandler().handle);
 
 app.serve({ port: 8000 });
