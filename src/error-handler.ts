@@ -51,7 +51,7 @@ export default class ErrorHandler {
       decorations,
     });
 
-    const { pathname } = new URL('../templates/development.txt', import.meta.url);
+    const { pathname } = new URL('../templates/development.vto', import.meta.url);
     
     const html = await Deno.readTextFile(pathname);
 
