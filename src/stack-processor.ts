@@ -20,7 +20,7 @@ export default class StackProcessor {
     const stack: StackTraceItem[] = [];
     const regex = /^\s*at\s+(?:(.*?) \((.*):(\d+):(\d+)\)|(.*):(\d+):(\d+))$/;
 
-    const lines = this.stack.split('\n');
+    const lines = this.stack.split("\n");
 
     for (const line of lines) {
       const match = line.match(regex);
@@ -29,8 +29,8 @@ export default class StackProcessor {
 
       if (match[1]) {
         stack.push({
-          method: match[1].replace(/^async\s+/, '').trim(),
-          file: match[2].replace(/^file:\/\//, ''),
+          method: match[1].replace(/^async\s+/, "").trim(),
+          file: match[2].replace(/^file:\/\//, ""),
           line: parseInt(match[3], 10),
           col: parseInt(match[4], 10),
         });
@@ -40,7 +40,7 @@ export default class StackProcessor {
 
       stack.push({
         method: null,
-        file: match[5].replace(/^file:\/\//, ''),
+        file: match[5].replace(/^file:\/\//, ""),
         line: parseInt(match[6], 10),
         col: parseInt(match[7], 10),
       });

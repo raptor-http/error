@@ -27,22 +27,25 @@ export default class ErrorHandler {
     const windowSize = 10;
 
     const highlightLine = (stackLines[0].line ?? 1) - 1;
-    const codeLines = fileCode.split('\n');
+    const codeLines = fileCode.split("\n");
 
     const start = Math.max(0, highlightLine - windowSize);
     const end = Math.min(codeLines.length, highlightLine + windowSize + 1);
 
     const snippetLines = codeLines.slice(start, end);
-    const snippet = snippetLines.join('\n');
+    const snippet = snippetLines.join("\n");
 
     const decorationLine = highlightLine - start;
 
     const decorations = [
       {
         start: { line: decorationLine, character: 0 },
-        end: { line: decorationLine, character: snippetLines[decorationLine].length },
-        properties: { class: 'highlighted-line' }
-      }
+        end: {
+          line: decorationLine,
+          character: snippetLines[decorationLine].length,
+        },
+        properties: { class: "highlighted-line" },
+      },
     ];
 
     const code = await codeToHtml(snippet, {
@@ -51,8 +54,11 @@ export default class ErrorHandler {
       decorations,
     });
 
-    const { pathname } = new URL('../templates/development.vto', import.meta.url);
-    
+    const { pathname } = new URL(
+      "../templates/development.vto",
+      import.meta.url,
+    );
+
     const html = await Deno.readTextFile(pathname);
 
     const template = await templating.runString(html, {
@@ -69,8 +75,8 @@ export default class ErrorHandler {
       status: error.status ?? 500,
       headers: {
         ...context.response.headers,
-        "Content-Type": "text/html"
-      }
+        "Content-Type": "text/html",
+      },
     });
   }
-};
+}
