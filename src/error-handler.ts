@@ -1,22 +1,21 @@
-import vento from "jsr:@vento/vento";
-import { codeToHtml } from "npm:shiki";
 import type { Context, Error } from "jsr:@raptor/framework";
 
 import StackProcessor from "./stack-processor.ts";
+import CodeHighlighter from "./code-highlighter.ts";
+import TemplateRenderer from "./template-renderer.ts";
+import CodeExtractor from "./code-extractor.ts";
 
 export default class ErrorHandler {
-  /**
-   * The error stack processor.
-   */
-  private stackProcessor : StackProcessor;
-
-  /**
-   * A configurable offset used to cut code preview.
-   */
-  private codeLineOffset : number = 10;
+  private codeExtractor: CodeExtractor;
+  private templateRenderer: TemplateRenderer;
+  private codeHighlighter: CodeHighlighter;
+  private stackProcessor: StackProcessor;
 
   constructor() {
+    this.codeExtractor = new CodeExtractor();
     this.stackProcessor = new StackProcessor();
+    this.templateRenderer = new TemplateRenderer();
+    this.codeHighlighter = new CodeHighlighter();
   }
 
   /**
@@ -26,61 +25,40 @@ export default class ErrorHandler {
    * @returns An HTTP response object.
    */
   public async handle(error: Error, context: Context): Promise<Response> {
-    const templating = vento();
-
     this.stackProcessor.addStackData(error.stack as string);
 
     const stackLines = this.stackProcessor.process();
 
+    if (!stackLines.length) {
+      throw new Error("Could not parse any stack lines from error stack");
+    }
+
     const path = stackLines[0].file;
 
-    const data = Deno.readFileSync(path);
+    if (!path) {
+      throw new Error("StackParser did not find a file in first stack frame");
+    }
 
-    const fileCode = new TextDecoder().decode(data).trim();
+    const highlightLine = stackLines[0].line ?? 1;
 
-    const highlightLine = (stackLines[0].line ?? 1) - 1;
-    const codeLines = fileCode.split("\n");
+    const { snippet, decorationLine, snippetLines } = this.codeExtractor.extract(path, highlightLine);
 
-    const start = Math.max(0, highlightLine - this.codeLineOffset);
-    const end = Math.min(codeLines.length, highlightLine + this.codeLineOffset + 1);
-
-    const snippetLines = codeLines.slice(start, end);
-    const snippet = snippetLines.join("\n");
-
-    const decorationLine = highlightLine - start;
-
-    const decorations = [
-      {
-        start: { line: decorationLine, character: 0 },
-        end: {
-          line: decorationLine,
-          character: snippetLines[decorationLine].length,
-        },
-        properties: { class: "highlighted-line" },
-      },
-    ];
-
-    const code = await codeToHtml(snippet, {
-      lang: "ts",
-      theme: "material-theme-darker",
-      decorations,
-    });
-
-    const { pathname } = new URL(
-      "../templates/development.vto",
-      import.meta.url,
+    const code = await this.codeHighlighter.highlightCode(
+      snippet,
+      snippetLines,
+      decorationLine,
     );
 
-    const html = await Deno.readTextFile(pathname);
+    const templatePath = new URL("../templates/development.vto", import.meta.url).pathname;
 
-    const template = await templating.runString(html, {
+    const template = await this.templateRenderer.render(templatePath, {
+      code,
       type: error.constructor.name,
       name: error.message,
       stack: {
         raw: error.stack,
         lines: stackLines,
       },
-      code,
     });
 
     return new Response(template.content, {
