@@ -6,9 +6,9 @@ type StackTraceItem = {
 };
 
 export default class StackProcessor {
-  private stack: string;
+  private stack?: string;
 
-  constructor(stack: string) {
+  public addStackData(stack: string): void {
     this.stack = stack;
   }
 
@@ -17,7 +17,10 @@ export default class StackProcessor {
   }
 
   public extractStackLines(): StackTraceItem[] {
+    if (!this.stack) return [];
+
     const stack: StackTraceItem[] = [];
+
     const regex = /^\s*at\s+(?:(.*?) \((.*):(\d+):(\d+)\)|(.*):(\d+):(\d+))$/;
 
     const lines = this.stack.split("\n");

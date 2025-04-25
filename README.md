@@ -47,7 +47,9 @@ const handler = new ErrorHandler();
 
 app.add(() => "Hello, Dr Malcolm!");
 
-app.catch(handler.handle);
+app.catch((error: Error, context: Context) => {
+  return handler.handle(error, context)
+});
 
 app.serve({ port: 8000 });
 ```

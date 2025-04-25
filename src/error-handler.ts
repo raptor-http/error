@@ -6,17 +6,31 @@ import StackProcessor from "./stack-processor.ts";
 
 export default class ErrorHandler {
   /**
+   * The error stack processor.
+   */
+  private stackProcessor : StackProcessor;
+
+  /**
+   * A configurable offset used to cut code preview.
+   */
+  private codeLineOffset : number = 10;
+
+  constructor() {
+    this.stackProcessor = new StackProcessor();
+  }
+
+  /**
    * Handle the current http context and process routes.
    *
    * @param context The current http context.
-   * @returns An unknown data type.
+   * @returns An HTTP response object.
    */
   public async handle(error: Error, context: Context): Promise<Response> {
     const templating = vento();
 
-    const stackProcessor = new StackProcessor(error.stack as string);
+    this.stackProcessor.addStackData(error.stack as string);
 
-    const stackLines = stackProcessor.process();
+    const stackLines = this.stackProcessor.process();
 
     const path = stackLines[0].file;
 
@@ -24,13 +38,11 @@ export default class ErrorHandler {
 
     const fileCode = new TextDecoder().decode(data).trim();
 
-    const windowSize = 10;
-
     const highlightLine = (stackLines[0].line ?? 1) - 1;
     const codeLines = fileCode.split("\n");
 
-    const start = Math.max(0, highlightLine - windowSize);
-    const end = Math.min(codeLines.length, highlightLine + windowSize + 1);
+    const start = Math.max(0, highlightLine - this.codeLineOffset);
+    const end = Math.min(codeLines.length, highlightLine + this.codeLineOffset + 1);
 
     const snippetLines = codeLines.slice(start, end);
     const snippet = snippetLines.join("\n");
