@@ -1,26 +1,49 @@
 import type { Context, Error } from "jsr:@raptor/framework";
 
+import CodeExtractor from "./code-extractor.ts";
 import StackProcessor from "./stack-processor.ts";
 import CodeHighlighter from "./code-highlighter.ts";
 import TemplateRenderer from "./template-renderer.ts";
-import CodeExtractor from "./code-extractor.ts";
+import type { ErrorHandlerOptions } from "./error-handler-options.ts";
 
 export default class ErrorHandler {
+  /**
+   * The environment on which to handle errors.
+   */
+  private options : ErrorHandlerOptions;
+
+  /**
+   * The code snippet extractor.
+   */
   private codeExtractor: CodeExtractor;
+
+  /**
+   * The error template renderer.
+   */
   private templateRenderer: TemplateRenderer;
+
+  /**
+   * The code syntax highlighter.
+   */
   private codeHighlighter: CodeHighlighter;
+
+  /**
+   * The error stack processor.
+   */
   private stackProcessor: StackProcessor;
 
-  constructor() {
+  constructor(options?: ErrorHandlerOptions) {
     this.codeExtractor = new CodeExtractor();
     this.stackProcessor = new StackProcessor();
     this.templateRenderer = new TemplateRenderer();
     this.codeHighlighter = new CodeHighlighter();
+    this.options = options ?? this.initialiseDefaultOptions();
   }
 
   /**
    * Handle the current http context and process routes.
    *
+   * @param error The error object to handle.
    * @param context The current http context.
    * @returns An HTTP response object.
    */
@@ -50,13 +73,25 @@ export default class ErrorHandler {
       decorationLine,
     );
 
-    const templatePath =
-      new URL("../templates/development.vto", import.meta.url).pathname;
+    const templatePath = new URL(
+      `../templates/${this.options.env}.vto`,
+      import.meta.url
+    );
 
-    const template = await this.templateRenderer.render(templatePath, {
+    const template = await this.templateRenderer.render(templatePath.pathname, {
       code,
-      type: error.constructor.name,
-      name: error.message,
+      context: {
+        request: {
+          headers: {
+            userAgent: context.request.headers.get("user-agent"),
+          },
+        },
+        response: {
+          status: error.status,
+        }
+      },
+      name: error.name,
+      message: error.message,
       stack: {
         raw: error.stack,
         lines: stackLines,
@@ -70,5 +105,18 @@ export default class ErrorHandler {
         "Content-Type": "text/html",
       },
     });
+  }
+
+  /**
+   * Initialise the default kernel options.
+   *
+   * @param options Optional error handler options object.
+   * @returns A new error handler options object with defaults.
+   */
+  private initialiseDefaultOptions(options?: ErrorHandlerOptions): ErrorHandlerOptions {
+    return {
+      env: "production",
+      ...options,
+    };
   }
 }

@@ -43,7 +43,9 @@ import { Kernel, Context } from "jsr:@raptor/framework";
 
 const app = new Kernel();
 
-const handler = new ErrorHandler();
+const handler = new ErrorHandler({
+  env: "development"
+});
 
 app.add(() => "Hello, Dr Malcolm!");
 

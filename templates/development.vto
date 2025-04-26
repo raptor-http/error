@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>{{ type }} - {{ name }}</title>
+    <title>{{ name }} - {{ message }}</title>
     
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
@@ -196,8 +196,8 @@
     <main class="container">
       <section class="primary-panel">
         <div class="title">
-          <h1>{{ type }}</h1>
-          <div class="subtitle">{{ name }}</div>
+          <h1>{{ context.response.status }} - {{ name }}</h1>
+          <div class="subtitle">{{ message }}</div>
         </div>
 
         <div class="stack">
@@ -238,6 +238,8 @@
 
         <div class="environment-details">
           <h2>Environment Details</h2>
+
+          {{ JSON.stringify(context.request) }}
         </div>
       </section>
     </main>
