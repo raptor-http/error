@@ -1,4 +1,4 @@
-import { codeToHtml } from "npm:shiki";
+import { codeToHtml } from "npm:shiki@3.19.0";
 
 export default class CodeHighlighter {
   async highlightCode(

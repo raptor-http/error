@@ -1,4 +1,4 @@
-import vento from "jsr:@vento/vento";
+import vento from "npm:ventojs@2.2.0";
 
 export default class TemplateRenderer {
   private templating = vento();

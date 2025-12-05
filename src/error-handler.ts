@@ -1,4 +1,4 @@
-import type { Context, Error } from "jsr:@raptor/framework";
+import type { Context, Error } from "jsr:@raptor/framework@0.7.5";
 
 import CodeExtractor from "./code-extractor.ts";
 import StackProcessor from "./stack-processor.ts";
