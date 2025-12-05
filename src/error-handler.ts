@@ -10,7 +10,7 @@ export default class ErrorHandler {
   /**
    * The environment on which to handle errors.
    */
-  private options : ErrorHandlerOptions;
+  private options: ErrorHandlerOptions;
 
   /**
    * The code snippet extractor.
@@ -63,7 +63,7 @@ export default class ErrorHandler {
     }
 
     const highlightLine = stackLines[0].line ?? 1;
-    
+
     const { snippet, decorationLine, snippetLines } = this.codeExtractor
       .extract(path, highlightLine);
 
@@ -75,7 +75,7 @@ export default class ErrorHandler {
 
     const templatePath = new URL(
       `../templates/${this.options.env}.vto`,
-      import.meta.url
+      import.meta.url,
     );
 
     const template = await this.templateRenderer.render(templatePath.pathname, {
@@ -86,7 +86,7 @@ export default class ErrorHandler {
         },
         response: {
           status: error.status,
-        }
+        },
       },
       name: error.name,
       message: error.message,
@@ -111,7 +111,9 @@ export default class ErrorHandler {
    * @param options Optional error handler options object.
    * @returns A new error handler options object with defaults.
    */
-  private initialiseDefaultOptions(options?: ErrorHandlerOptions): ErrorHandlerOptions {
+  private initialiseDefaultOptions(
+    options?: ErrorHandlerOptions,
+  ): ErrorHandlerOptions {
     return {
       env: "production",
       ...options,
