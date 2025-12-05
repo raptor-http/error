@@ -1,15 +1,31 @@
 export default class CodeExtractor {
   constructor(private codeLineOffset: number = 10) {}
 
-  extract(filePath: string, highlightLine: number) {
-    try {
-      Deno.statSync(filePath);
-    } catch {
-      throw new Error(`Source file does not exist: ${filePath}`);
+  async extract(filePath: string, highlightLine: number) {
+    let fileCode: string;
+
+    if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch source: ${filePath}`);
+        }
+        fileCode = await response.text();
+      } catch {
+        return null;
+      }
+    } else {
+      try {
+        Deno.statSync(filePath);
+      } catch {
+        throw new Error(`Source file does not exist: ${filePath}`);
+      }
+
+      const data = Deno.readFileSync(filePath);
+  
+      fileCode = new TextDecoder().decode(data).trim();
     }
 
-    const data = Deno.readFileSync(filePath);
-    const fileCode = new TextDecoder().decode(data).trim();
     const codeLines = fileCode.split("\n");
 
     if (
@@ -24,11 +40,14 @@ export default class CodeExtractor {
     }
 
     const zeroBasedHighlight = highlightLine - 1;
+
     const start = Math.max(0, zeroBasedHighlight - this.codeLineOffset);
+
     const end = Math.min(
       codeLines.length,
       zeroBasedHighlight + this.codeLineOffset + 1,
     );
+
     const snippetLines = codeLines.slice(start, end);
 
     if (!snippetLines.length) {

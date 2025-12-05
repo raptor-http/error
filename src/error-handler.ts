@@ -64,8 +64,14 @@ export default class ErrorHandler {
 
     const highlightLine = stackLines[0].line ?? 1;
 
-    const { snippet, decorationLine, snippetLines } = this.codeExtractor
+    const extraction = await this.codeExtractor
       .extract(path, highlightLine);
+
+    if (!extraction) {
+      throw new Error(`Could not extract code from ${path}`);
+    }
+
+    const { snippet, decorationLine, snippetLines } = extraction;
 
     const code = await this.codeHighlighter.highlightCode(
       snippet,
