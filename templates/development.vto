@@ -133,6 +133,10 @@
         width: 100%;
       }
 
+      .secondary-panel .highlighted-line::before {
+        color: rgba(255,255,255,.8);
+      }
+
       .stack {
         font-size: 0.875rem;
       }
@@ -239,7 +243,7 @@
         <div class="environment-details">
           <h2>Environment Details</h2>
 
-          {{ JSON.stringify(context.request) }}
+          {{ JSON.stringify(context) }}
         </div>
       </section>
     </main>

@@ -63,7 +63,7 @@ export default class ErrorHandler {
     }
 
     const highlightLine = stackLines[0].line ?? 1;
-
+    
     const { snippet, decorationLine, snippetLines } = this.codeExtractor
       .extract(path, highlightLine);
 
@@ -82,9 +82,7 @@ export default class ErrorHandler {
       code,
       context: {
         request: {
-          headers: {
-            userAgent: context.request.headers.get("user-agent"),
-          },
+          headers: context.request.headers.values(),
         },
         response: {
           status: error.status,
