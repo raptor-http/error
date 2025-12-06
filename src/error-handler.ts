@@ -96,7 +96,7 @@ export default class ErrorHandler {
       `../templates/${this.options.env}.vto`,
       import.meta.url,
     );
-    console.log(context.request)
+    console.log(context.request);
     const template = await this.templateRenderer.render(templatePath.href, {
       code,
       context: {
