@@ -15,7 +15,8 @@ export default class TemplateRenderer {
   }
 
   private async loadTemplate(pathname: string): Promise<string> {
-    const isRemote = pathname.startsWith("http://") || pathname.startsWith("https://");
+    const isRemote = pathname.startsWith("http://") ||
+      pathname.startsWith("https://");
 
     if (isRemote) {
       return await this.fetchRemoteTemplate(pathname);

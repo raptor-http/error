@@ -16,12 +16,13 @@ export default class CodeExtractor {
   }
 
   private async loadFileContent(filePath: string): Promise<string | null> {
-    const isRemote = filePath.startsWith("http://") || filePath.startsWith("https://");
-    
+    const isRemote = filePath.startsWith("http://") ||
+      filePath.startsWith("https://");
+
     if (isRemote) {
       return await this.fetchRemoteFile(filePath);
     }
-    
+
     return this.readLocalFile(filePath);
   }
 
@@ -29,7 +30,7 @@ export default class CodeExtractor {
     try {
       const response = await fetch(url);
       if (!response.ok) return null;
-      
+
       return await response.text();
     } catch {
       return null;
@@ -58,10 +59,13 @@ export default class CodeExtractor {
   private createSnippet(codeLines: string[], highlightLine: number) {
     const zeroBasedHighlight = highlightLine - 1;
     const start = Math.max(0, zeroBasedHighlight - this.codeLineOffset);
-    const end = Math.min(codeLines.length, zeroBasedHighlight + this.codeLineOffset + 1);
+    const end = Math.min(
+      codeLines.length,
+      zeroBasedHighlight + this.codeLineOffset + 1,
+    );
 
     const snippetLines = codeLines.slice(start, end);
-    
+
     if (!snippetLines.length) return null;
 
     return {
