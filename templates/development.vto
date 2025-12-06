@@ -77,10 +77,20 @@
         padding: 2rem;
       }
 
+      .secondary-panel .code-container .code-window code {
+        word-wrap: break-word;
+        overflow-x: scroll;
+      }
+
+      .secondary-panel .code-container .code-window > div {
+        width: 100%;
+      }
+
       .secondary-panel .code-container .file-details {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
         margin-bottom: 1.5rem;
       }
 
@@ -89,6 +99,8 @@
         font-family: monospace;
         font-weight: 300;
         font-size: 0.875rem;
+        word-wrap: break-word;
+        overflow: hidden;
       }
 
       .secondary-panel .code-container .file-details .open a {
@@ -171,7 +183,8 @@
         width: 1rem;
         display: inline-block;
         text-align: right;
-        color: rgba(115,138,148,.4)
+        color: rgba(115,138,148,.4);
+        word-wrap: none;
       }
 
       .stack-line:hover {
@@ -182,6 +195,13 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
+        overflow: hidden;
+      }
+
+      .stack-line-content {
+        word-wrap: break-word;
+        overflow-x: scroll;
       }
 
       .stack-line-method {
@@ -193,6 +213,47 @@
       .stack-line strong {
         color: #3a9d95;
       }
+
+      .shiki {
+        overflow-x: auto;
+        border-radius: 4px;
+        border: 1px solid #3c3c3c;
+        max-width: 100%;
+        background: #212121;
+      }
+
+      .shiki pre {
+        margin: 0;
+        background: transparent;
+      }
+
+      .shiki code {
+        display: block;
+      }
+
+      .shiki code .line {
+        counter-increment: line;
+        line-height: 1.6rem;
+      }
+
+      .shiki code .line::before {
+        content: counter(line);
+        counter-increment: line;
+        flex-shrink: 0;
+        text-align: right;
+        color: #858585;
+        user-select: none;
+        background: #212121;
+      }
+
+      .shiki code .highlighted-line {
+        background: rgba(255, 255, 0, 0.1);
+      }
+
+      .shiki code .highlighted-line::before {
+        background: rgba(255, 255, 0, 0.1);
+        color: #ffffff;
+      }
     </style>
   </head>
   
@@ -200,7 +261,12 @@
     <main class="container">
       <section class="primary-panel">
         <div class="title">
-          <h1>{{ context.response.status }} - {{ name }}</h1>
+          <h1>
+            {{ if context.response.status }}
+              {{ context.response.status }} - 
+            {{ /if }}
+            {{ name }}
+          </h1>
           <div class="subtitle">{{ message }}</div>
         </div>
 
@@ -228,7 +294,7 @@
         </div>
       </div>
 
-      <section class="secondary-panel" style="counter-increment: step {{ stack.lines[0].line - 11 }}">
+      <section class="secondary-panel" style="counter-increment: step {{ stack.lines[0].line - 10 }}">
         <div class="code-container">
           <div class="file-details">
             <div class="path">{{ stack.lines[0].file }}</div>
@@ -237,7 +303,9 @@
             </div>
           </div>
 
-          {{ code }}
+          <div class="code-window">
+            {{ code }}
+          </div>
         </div>
 
         <div class="environment-details">

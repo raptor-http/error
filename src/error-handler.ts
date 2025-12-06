@@ -1,4 +1,4 @@
-import type { Context, Error } from "jsr:@raptor/framework@0.8.2";
+import { ServerError, type Context, type Error } from "jsr:@raptor/framework@0.8.2";
 
 import CodeExtractor from "./code-extractor.ts";
 import StackProcessor from "./stack-processor.ts";
@@ -53,22 +53,28 @@ export default class ErrorHandler {
     const stackLines = this.stackProcessor.process();
 
     if (!stackLines.length) {
-      throw new Error("Could not parse any stack lines from error stack");
+      throw new ServerError();
     }
 
-    const path = stackLines[0].file;
+    let extraction = null;
+    let path = null;
+    let highlightLine = 1;
 
-    if (!path) {
-      throw new Error("StackParser did not find a file in first stack frame");
+    for (const stackLine of stackLines) {
+      if (!stackLine.file) continue;
+
+      path = stackLine.file;
+      highlightLine = stackLine.line ?? 1;
+
+      extraction = await this.codeExtractor.extract(path, highlightLine);
+
+      if (extraction) {
+        break;
+      }
     }
-
-    const highlightLine = stackLines[0].line ?? 1;
-
-    const extraction = await this.codeExtractor
-      .extract(path, highlightLine);
 
     if (!extraction) {
-      throw new Error(`Could not extract code from ${path}`);
+      throw new ServerError();
     }
 
     const { snippet, decorationLine, snippetLines } = extraction;
@@ -84,7 +90,7 @@ export default class ErrorHandler {
       import.meta.url,
     );
 
-    const template = await this.templateRenderer.render(templatePath.href, {
+    const template = await this.templateRenderer.render(templatePath.pathname, {
       code,
       context: {
         request: {
