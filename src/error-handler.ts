@@ -90,7 +90,7 @@ export default class ErrorHandler {
       import.meta.url,
     );
 
-    const template = await this.templateRenderer.render(templatePath.pathname, {
+    const template = await this.templateRenderer.render(templatePath.href, {
       code,
       context: {
         request: {
