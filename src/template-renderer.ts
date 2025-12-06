@@ -6,7 +6,7 @@ export default class TemplateRenderer {
 
   async render(pathname: string, context: Record<string, unknown>) {
     const html = await this.loadTemplate(pathname);
-    
+
     if (!html.trim()) {
       throw new ServerError(`Template file is empty: ${pathname}`);
     }
@@ -16,18 +16,18 @@ export default class TemplateRenderer {
 
   private async loadTemplate(pathname: string): Promise<string> {
     const isRemote = pathname.startsWith("http://") || pathname.startsWith("https://");
-    
+
     if (isRemote) {
       return await this.fetchRemoteTemplate(pathname);
     }
-    
+
     return await this.readLocalTemplate(pathname);
   }
 
   private async fetchRemoteTemplate(url: string): Promise<string> {
     try {
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new ServerError(`Template file not found: ${url}`);
       }
@@ -41,8 +41,9 @@ export default class TemplateRenderer {
 
   private async readLocalTemplate(pathname: string): Promise<string> {
     try {
-      await Deno.stat(pathname);
-      return await Deno.readTextFile(pathname);
+      const url = new URL(pathname, import.meta.url);
+
+      return await Deno.readTextFile(url);
     } catch {
       throw new ServerError(`Template file not found: ${pathname}`);
     }
