@@ -1,7 +1,29 @@
+interface Snippet {
+  snippet: string;
+  decorationLine: number;
+  snippetLines: string[];
+}
+
+/**
+ * Extract originating code from the error.
+ */
 export default class CodeExtractor {
+  /**
+   * Construct a new code extractor.
+   *
+   * @param codeLineOffset The code line offset.
+   */
   constructor(private codeLineOffset: number = 10) {}
 
-  async extract(filePath: string, highlightLine: number) {
+  /**
+   * @param filePath The path to the file.
+   * @param highlightLine The line number to highlight.
+   * @returns
+   */
+  async extract(
+    filePath: string,
+    highlightLine: number,
+  ): Promise<null | Snippet> {
     const fileCode = await this.loadFileContent(filePath);
 
     if (!fileCode) return null;
@@ -15,20 +37,35 @@ export default class CodeExtractor {
     return this.createSnippet(codeLines, highlightLine);
   }
 
-  private async loadFileContent(filePath: string): Promise<string | null> {
+  /**
+   * Load the contents of the file.
+   *
+   * @param filePath The path to the file.
+   * @returns The contents of the file.
+   */
+  private loadFileContent(
+    filePath: string,
+  ): string | null | Promise<string | null> {
     const isRemote = filePath.startsWith("http://") ||
       filePath.startsWith("https://");
 
     if (isRemote) {
-      return await this.fetchRemoteFile(filePath);
+      return this.fetchRemoteFile(filePath);
     }
 
     return this.readLocalFile(filePath);
   }
 
+  /**
+   * Fetch the remote file contents.
+   *
+   * @param url The URL to the remote file.
+   * @returns The contents of the remote file.
+   */
   private async fetchRemoteFile(url: string): Promise<string | null> {
     try {
       const response = await fetch(url);
+
       if (!response.ok) return null;
 
       return await response.text();
@@ -37,6 +74,12 @@ export default class CodeExtractor {
     }
   }
 
+  /**
+   * Read the local file contents.
+   *
+   * @param filePath The path to the file.
+   * @returns The local file contents.
+   */
   private readLocalFile(filePath: string): string | null {
     try {
       Deno.statSync(filePath);
@@ -47,6 +90,13 @@ export default class CodeExtractor {
     }
   }
 
+  /**
+   * Check if the line is valid for highlighting.
+   *
+   * @param line The line number to highlight.
+   * @param totalLines The total number of lines.
+   * @returns Boolean indicating whether the highlighted line is valid.
+   */
   private isValidHighlightLine(line: number, totalLines: number): boolean {
     return (
       typeof line === "number" &&
@@ -56,7 +106,17 @@ export default class CodeExtractor {
     );
   }
 
-  private createSnippet(codeLines: string[], highlightLine: number) {
+  /**
+   * Create a snippet.
+   *
+   * @param codeLines The lines of code.
+   * @param highlightLine The highlighted line.
+   * @returns A snippet for the code extractor.
+   */
+  private createSnippet(
+    codeLines: string[],
+    highlightLine: number,
+  ): Snippet | null {
     const zeroBasedHighlight = highlightLine - 1;
     const start = Math.max(0, zeroBasedHighlight - this.codeLineOffset);
     const end = Math.min(

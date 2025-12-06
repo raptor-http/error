@@ -1,19 +1,39 @@
 import vento from "npm:ventojs@2.2.0";
 import { ServerError } from "jsr:@raptor/framework@0.8.2";
+import type { TemplateResult } from "npm:ventojs@2.2.0/core/environment.js";
 
+/**
+ * The error template renderer.
+ */
 export default class TemplateRenderer {
   private templating = vento();
 
-  async render(pathname: string, context: Record<string, unknown>) {
+  /**
+   * Render the template with context.
+   *
+   * @param pathname The path to the template.
+   * @param context The request context for the template to use.
+   * @returns The template result.
+   */
+  async render(
+    pathname: string,
+    context: Record<string, unknown>,
+  ): Promise<TemplateResult> {
     const html = await this.loadTemplate(pathname);
 
     if (!html.trim()) {
       throw new ServerError(`Template file is empty: ${pathname}`);
     }
 
-    return await this.templating.runString(html, context);
+    return this.templating.runString(html, context);
   }
 
+  /**
+   * Load the template.
+   *
+   * @param pathname The path to the template file.
+   * @returns The template file contents.
+   */
   private async loadTemplate(pathname: string): Promise<string> {
     const isRemote = pathname.startsWith("http://") ||
       pathname.startsWith("https://");
@@ -25,6 +45,12 @@ export default class TemplateRenderer {
     return await this.readLocalTemplate(pathname);
   }
 
+  /**
+   * Fetch a remote template file.
+   *
+   * @param url The URL to the remote template file.
+   * @returns The template file contents.
+   */
   private async fetchRemoteTemplate(url: string): Promise<string> {
     try {
       const response = await fetch(url);
@@ -40,6 +66,12 @@ export default class TemplateRenderer {
     }
   }
 
+  /**
+   * Read a local template file.
+   *
+   * @param pathname The path to the template file.
+   * @returns The template file contents.
+   */
   private async readLocalTemplate(pathname: string): Promise<string> {
     try {
       const url = new URL(pathname, import.meta.url);

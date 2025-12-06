@@ -10,6 +10,9 @@ import CodeHighlighter from "./code-highlighter.ts";
 import TemplateRenderer from "./template-renderer.ts";
 import type { ErrorHandlerOptions } from "./error-handler-options.ts";
 
+/**
+ * The error handler middleware.
+ */
 export default class ErrorHandler {
   /**
    * The environment on which to handle errors.
