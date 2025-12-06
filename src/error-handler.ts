@@ -96,12 +96,15 @@ export default class ErrorHandler {
       `../templates/${this.options.env}.vto`,
       import.meta.url,
     );
-
+    console.log(context.request)
     const template = await this.templateRenderer.render(templatePath.href, {
       code,
       context: {
         request: {
-          headers: context.request.headers.values(),
+          url: context.request.url,
+          method: context.request.method,
+          referrer: context.request.referrer,
+          headers: Object.fromEntries(context.request.headers.entries()),
         },
         response: {
           status: error.status,

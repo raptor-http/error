@@ -253,6 +253,37 @@
         background: rgba(255, 255, 0, 0.1);
         color: #ffffff;
       }
+
+      .environment-details h2 {
+        margin-bottom: 1rem;
+      }
+
+      .environment-details h3 {
+        margin-bottom: 1rem;
+      }
+
+      .environment-details h4 {
+        margin-bottom: 1rem;
+      }
+
+      .key-value {
+        align-items: center;
+        border-bottom: 1px solid #dedede;
+        display: flex;
+        gap: 1.5rem;
+        padding: 0.5rem 0;
+      }
+
+      .key-value .key {
+        font-weight: 700;
+        min-width: 200px;
+      }
+
+      .key-value .value {
+        font-style: italic;
+        overflow: hidden;
+        word-wrap: break-word;
+      }
     </style>
   </head>
   
@@ -308,9 +339,18 @@
         </div>
 
         <div class="environment-details">
-          <h2>Environment Details</h2>
+          <h2>Context</h2>
 
-          {{ JSON.stringify(context) }}
+          <h3>Request</h3>
+
+          <div class="request-headers">
+            {{ for key, value of context.request.headers }}
+              <div class="key-value">
+                <div class="key">{{ key }}</div>
+                <div class="value">{{ value }}</div>
+              </div>
+            {{ /for }}
+          </div>
         </div>
       </section>
     </main>
