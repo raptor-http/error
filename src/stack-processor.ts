@@ -1,4 +1,4 @@
-type StackTraceItem = {
+export type StackTraceItem = {
   method: string | null;
   file: string;
   line: number;

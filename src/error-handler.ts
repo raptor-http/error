@@ -5,10 +5,10 @@ import {
 } from "jsr:@raptor/framework@0.8.2";
 
 import CodeExtractor from "./code-extractor.ts";
-import StackProcessor from "./stack-processor.ts";
 import CodeHighlighter from "./code-highlighter.ts";
 import TemplateRenderer from "./template-renderer.ts";
 import type { ErrorHandlerOptions } from "./error-handler-options.ts";
+import StackProcessor, { type StackTraceItem } from "./stack-processor.ts";
 
 /**
  * The error handler middleware.
@@ -96,15 +96,46 @@ export default class ErrorHandler {
       `../templates/${this.options.env}.vto`,
       import.meta.url,
     );
-    console.log(context.request);
-    const template = await this.templateRenderer.render(templatePath.href, {
+
+    const template = await this.templateRenderer.render(
+      templatePath.href,
+      this.prepareResponsePayload(code, error, context, stackLines),
+    );
+
+    return new Response(template.content, {
+      status: error.status ?? 500,
+      headers: {
+        ...context.response.headers,
+        "Content-Type": "text/html",
+      },
+    });
+  }
+
+  /**
+   * Prepare the payload for response.
+   *
+   * @param code The code where the error originated.
+   * @param error The error object.
+   * @param context The request context.
+   * @param stackLines The stack lines for the error.
+   * @returns A prepared response payload.
+   */
+  private prepareResponsePayload(
+    code: string,
+    error: Error,
+    context: Context,
+    stackLines: StackTraceItem[],
+  ) {
+    return {
       code,
       context: {
         request: {
           url: context.request.url,
           method: context.request.method,
           referrer: context.request.referrer,
-          headers: Object.fromEntries(context.request.headers.entries()),
+          headers: Object.fromEntries(
+            context.request.headers.entries(),
+          ),
         },
         response: {
           status: error.status,
@@ -116,15 +147,7 @@ export default class ErrorHandler {
         raw: error.stack,
         lines: stackLines,
       },
-    });
-
-    return new Response(template.content, {
-      status: error.status ?? 500,
-      headers: {
-        ...context.response.headers,
-        "Content-Type": "text/html",
-      },
-    });
+    };
   }
 
   /**
