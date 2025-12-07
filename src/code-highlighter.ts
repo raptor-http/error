@@ -43,7 +43,10 @@ export default class CodeHighlighter {
 
     return await codeToHtml(snippet, {
       lang: "ts",
-      theme: "github-light",
+      themes: { 
+        light: 'github-light',
+        dark: 'github-dark',
+      },
       decorations,
     });
   }

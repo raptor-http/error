@@ -3,9 +3,11 @@
     <title>{{ name }} - {{ message }}</title>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Vujahday+Script&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Recursive:wght@200..900&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
 
       :root {
+        color-scheme: light dark;
+
         --color-pure-white: #ffffff;
         --color-white: #fafcff;
         --color-neutral-50: #f8f9fc;
@@ -30,7 +32,35 @@
         --color-primary-700: #004166;
         --color-primary-800: #002633;
         --color-primary-900: #001319;
-        --color-primary-950: #000a0d;      
+        --color-primary-950: #000a0d;    
+
+        --background-color: #F0F3F8;
+        --card-background-color: #FBFCFF;
+        --code-window-background-color: var(--color-pure-white);
+        --border-color: #DCE0EB;
+        --font-color: var(--color-neutral-600);
+        --heading-color: var(--color-neutral-950);
+        --primary-accent-color: var(--color-primary-400);
+        --code-highlight-background-color: var(--color-neutral-100);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background-color: #010616;
+          --card-background-color: #0A0F1C;
+          --code-window-background-color: var(--background-color);
+          --border-color: var(--color-neutral-700);
+          --font-color: var(--color-neutral-400);
+          --heading-color: var(--color-neutral-50);
+          --code-highlight-background-color: var(--color-neutral-800);
+          --primary-accent-color: var(--color-primary-300);
+        }
+
+        .shiki,
+        .shiki span {
+          color: var(--shiki-dark) !important;
+          background-color: var(--background-color) !important;
+        }
       }
 
       * {
@@ -38,24 +68,26 @@
       }
 
       body {
-        background: #F0F3F8;
+        background: var(--background-color);
         background-image: radial-gradient(ellipse farthest-side at 25% 25%, var(--bg-color), var(--bg-color) 50%, transparent), radial-gradient(var(--line-color) 1.5px, transparent 1.5px), linear-gradient(0deg, transparent, var(--bg-color) 30%, var(--bg-color)), linear-gradient(0deg, var(--bg-color), var(--bg-color));
         background-size: cover, 1rem 1rem, cover;
         background-position: 0 0, calc(-.5rem - .5px) calc(-.25rem + .5px), 0 0;
-        color: #000000;
-        font-family: "Inconsolata", monospace;
+        color: var(--font-color);
+        font-size: 16px;
+        font-family: "Recursive", monospace;
         font-weight: 400;
         padding: 2rem 2rem 4rem;
       }
 
       h1, h2, h3, h4 {
+        color: var(--heading-color);
         margin: 0 0 1rem;
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        font-family: "Sorts Mill Goudy", serif;
         margin: 0 0 1rem;
-        color: var(--color-primary-950);
       }
 
       h3 {
@@ -77,30 +109,82 @@
       }
 
       main details summary {
+        cursor: pointer;
+        color: var(--heading-color);
+        font-family: "Sorts Mill Goudy", serif;
+        font-size: 1.25rem;
+      }
+
+      main details:open summary {
         margin-bottom: 1.5rem;
       }
 
       .card {
-        background: #ffffff;
+        background: var(--card-background-color);
         border-radius: 0.5rem;
-        border: 2px solid var(--color-neutral-300);
-        padding: 2rem;
+        border: 2px solid var(--border-color);
+        padding: 1.5rem;
+      }
+
+      .stack ol {
+        margin: 0;
+        padding: 0;
+      }
+
+      .stack-line-container {
+        align-items: center;
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        overflow: hidden;
       }
 
       .stack-line {
-        border-bottom: 1px solid var(--color-neutral-300);
+        counter-increment: countdown -1;
+        display: grid;
+        grid-template-columns: 2.5rem auto;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
         padding: 1rem 0;
+      }
+
+      .stack-line:before {
+        content: counter(countdown);
+        width: 1rem;
+        display: inline-block;
+        text-align: right;
+        color: var(--font-color);
+      }
+
+      .stack-line:last-of-type {
+        border: none;
+        padding-bottom: 0;
+      }
+
+      .stack-line-content {
+        word-wrap: break-word;
+        overflow-x: scroll;
+      }
+
+      .stack-line-position {
+        color: var(--primary-accent-color);
       }
 
       .key-value {
         align-items: center;
-        border-bottom: 1px solid var(--color-neutral-300);
+        border-bottom: 1px solid var(--border-color);
         display: flex;
         padding: 1rem 0;
         gap: 1.5rem;
       }
 
+      .key-value:last-of-type {
+        border: none;
+        padding-bottom: 0;
+      }
+
       .key-value .key {
+        color: var(--heading-color);
         font-weight: 700;
         min-width: 200px;
       }
@@ -108,17 +192,79 @@
       .key-value .value {
         word-wrap: break-word;
         overflow: hidden;
+        font-style: italic;
       }
 
       .file-details {
+        align-items: center;
+        display: flex;
+        gap: 1.5rem;
+        justify-content: space-between;
         margin-bottom: 1rem;
       }
 
+      .file-details .open a {
+        border-radius: 0.25rem;
+        border: 2px solid var(--border-color);
+        color: var(--color-neutral-500);
+        display: block;
+        font-weight: 600;
+        padding: 0.25rem 1rem;
+        text-decoration: none;
+      }
+
+      .file-details .open a:hover {
+        border-color: var(--color-neutral-500);
+        color: var(--color-neutral-500);
+      }
+
+      .file-details .path {
+        overflow: hidden;
+        word-wrap: break-word;
+      }
+
       .code-window {
-        border: 1px solid var(--color-neutral-300);
+        counter-reset: step;
+        background: var(--code-window-background-color);
+        border: 1px solid var(--border-color);
         border-radius: 0.5rem;
-        padding: 0.5rem 1rem;
+        padding: 0 1rem;
         font-size: 1rem;
+      }
+
+      .code-window code {
+        display: grid;
+        line-height: 1rem;
+      }
+
+      .code-window .line {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0;
+      }
+
+      .code-window .line::before {
+        content: counter(step);
+        counter-increment: step;
+        width: 1rem;
+        margin-right: 1.5rem;
+        display: inline-block;
+        text-align: right;
+        color: var(--font-color);
+      }
+
+      .code-window .highlighted-line,
+      .code-window .highlighted-line span {
+        background: var(--code-highlight-background-color) !important;
+      }
+
+      .code-window .line:hover {
+        background: var(--code-highlight-background-color);
+      }
+
+      .shiki {
+        overflow-x: auto;
+        max-width: 100%;
       }
     </style>
   </head>
@@ -131,7 +277,9 @@
         {{ /if }}
         {{ name }}
       </h1>
-      <div class="subtitle">{{ message }}</div>
+      <div class="subtitle">
+        <em>{{ message }}</em>
+      </div>
     </header>
   
     <main class="container">
