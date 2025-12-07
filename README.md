@@ -13,7 +13,7 @@
 
 See more information about the Raptor framework here: <a href="https://jsr.io/@raptor/framework">https://jsr.io/@raptor/framework</a>.
 
-# Usage
+## Usage
 
 > [!NOTE]
 > This is currently under heavy development and is not yet suitable for production use. Please proceed with caution.
