@@ -3,31 +3,77 @@
     <title>{{ name }} - {{ message }}</title>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Recursive:wght@200..900&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
 
       * {
         box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      :root {
+        color-scheme: light dark;
+
+        --color-pure-white: #ffffff;
+        --color-white: #fafcff;
+        --color-neutral-50: #f8f9fc;
+        --color-neutral-100: #f1f3f9;
+        --color-neutral-200: #e2e6f0;
+        --color-neutral-300: #cbd1e1;
+        --color-neutral-400: #94a0b8;
+        --color-neutral-500: #64708b;
+        --color-neutral-600: #475269;
+        --color-neutral-700: #334055;
+        --color-neutral-800: #1e253b;
+        --color-neutral-900: #0f152a;
+        --color-neutral-950: #020617;
+        --color-primary: #577c8e;
+        --color-primary-50: #f0f7ff;
+        --color-primary-100: #e0f0ff;
+        --color-primary-200: #b3e0ff;
+        --color-primary-300: #66c2ff;
+        --color-primary-400: #1a9fff;
+        --color-primary-500: #0077cc;
+        --color-primary-600: #005c99;
+        --color-primary-700: #004166;
+        --color-primary-800: #002633;
+        --color-primary-900: #001319;
+        --color-primary-950: #000a0d; 
+
+        --background-color: #F0F3F8;
+        --font-color: var(--color-neutral-600);
+        --heading-color: var(--color-neutral-950);
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background-color: #010616;
+          --font-color: var(--color-neutral-400);
+          --heading-color: var(--color-neutral-50);
+          --color-primary: var(--color-primary-400);
+        }
       }
 
       body {
-        background: #131314;
-        color: white;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: 400;
+        background: var(--background-color);
+        color: var(--font-color);
+        font-size: 16px;
+        font-family: "Recursive", monospace;
+        font-weight: 300;
         height: 100%;
         margin: 0;
         padding: 0;
       }
 
       h1, h2, h3, h4 {
-        font-family: "Cal Sans", sans-serif;
+        color: var(--heading-color);
+        font-family: "Sorts Mill Goudy", serif;
         margin: 0;
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 3rem;
         margin: 0 0 1rem;
-        color: #3a9d95;
+        color: var(--heading-color);
       }
 
       .container {
@@ -39,14 +85,14 @@
       }
 
       .subtitle {
-        font-size: 1.375rem;
+        font-size: 1rem;
         font-weight: 300;
         margin-bottom: 0;
       }
 
       em {
         font-style: normal;
-        color: #3a9d95;
+        color: var(--color-primary);
       }
     </style>
   </head>
