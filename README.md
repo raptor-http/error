@@ -56,7 +56,7 @@ app.catch((error: Error, context: Context) => {
 app.serve({ port: 8000 });
 ```
 
-# License
+## License
 
 _Copyright 2025, @briward. All rights reserved. The framework is licensed under
 the MIT license._
