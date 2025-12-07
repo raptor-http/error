@@ -3,275 +3,101 @@
     <title>{{ name }} - {{ message }}</title>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Vujahday+Script&display=swap');
+
+      :root {
+        --color-pure-white: #ffffff;
+        --color-white: #fafcff;
+        --color-neutral-50: #f8f9fc;
+        --color-neutral-100: #f1f3f9;
+        --color-neutral-200: #e2e6f0;
+        --color-neutral-300: #cbd1e1;
+        --color-neutral-400: #94a0b8;
+        --color-neutral-500: #64708b;
+        --color-neutral-600: #475269;
+        --color-neutral-700: #334055;
+        --color-neutral-800: #1e253b;
+        --color-neutral-900: #0f152a;
+        --color-neutral-950: #020617;
+        --color-primary: #577c8e;
+        --color-primary-50: #f0f7ff;
+        --color-primary-100: #e0f0ff;
+        --color-primary-200: #b3e0ff;
+        --color-primary-300: #66c2ff;
+        --color-primary-400: #1a9fff;
+        --color-primary-500: #0077cc;
+        --color-primary-600: #005c99;
+        --color-primary-700: #004166;
+        --color-primary-800: #002633;
+        --color-primary-900: #001319;
+        --color-primary-950: #000a0d;      
+      }
 
       * {
         box-sizing: border-box;
       }
 
       body {
-        background: #131314;
-        color: white;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #F0F3F8;
+        background-image: radial-gradient(ellipse farthest-side at 25% 25%, var(--bg-color), var(--bg-color) 50%, transparent), radial-gradient(var(--line-color) 1.5px, transparent 1.5px), linear-gradient(0deg, transparent, var(--bg-color) 30%, var(--bg-color)), linear-gradient(0deg, var(--bg-color), var(--bg-color));
+        background-size: cover, 1rem 1rem, cover;
+        background-position: 0 0, calc(-.5rem - .5px) calc(-.25rem + .5px), 0 0;
+        color: #000000;
+        font-family: "Inconsolata", monospace;
         font-weight: 400;
-        padding: 2rem;
+        padding: 2rem 2rem 4rem;
       }
 
       h1, h2, h3, h4 {
-        font-family: "Cal Sans", sans-serif;
-        margin: 0;
+        margin: 0 0 1rem;
       }
 
       h1 {
         font-size: 2rem;
         margin: 0 0 1rem;
-        color: #3a9d95;
+        color: var(--color-primary-950);
       }
 
       h3 {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 400;
       }
 
-      .subtitle {
-        font-size: 1.375rem;
-        font-weight: 300;
+      .container {
+        width: 100%;
+        max-width: 1024px;
+        margin: 0 auto;
+      }
+
+      header.title {
         margin-bottom: 2rem;
       }
 
-      em {
-        font-style: normal;
-        color: #3a9d95;
+      main .card {
+        margin-bottom: 2rem;
       }
 
-      .primary-panel {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 40%;
-        overflow-x: scroll;
-        height: 100%;
-        border-right: 1px solid #333333;
-      }
-
-      .title {
-        padding: 3rem 2rem 2rem;
-      }
-
-      .secondary-panel {
-        background: #f5f8fa;
-        top: 0;
-        left: 40%;
-        position: fixed;
-        width: 60%;
-        overflow-x: scroll;
-        height: 100%;
-      }
-
-      .secondary-panel {
-        counter-reset: step;
-      }
-
-      .secondary-panel .code-container {
-        background: #191919;
-        padding: 2rem;
-      }
-
-      .secondary-panel .code-container .code-window code {
-        word-wrap: break-word;
-        overflow-x: scroll;
-      }
-
-      .secondary-panel .code-container .code-window > div {
-        width: 100%;
-      }
-
-      .secondary-panel .code-container .file-details {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
+      main details summary {
         margin-bottom: 1.5rem;
       }
 
-      .secondary-panel .code-container .file-details .path {
-        color: #666666;
-        font-family: monospace;
-        font-weight: 300;
-        font-size: 0.875rem;
-        word-wrap: break-word;
-        overflow: hidden;
-      }
-
-      .secondary-panel .code-container .file-details .open a {
-        color: #666666;
-        display: inline-block;
-        border: 1px solid #666666;
-        font-size: 0.875rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 3px;
-        text-decoration: none;
-      }
-
-      .secondary-panel .code-container .file-details .open a:hover {
-        border-color: #999999;
-        color: #999999;
-      }
-
-      .secondary-panel pre {
-        border-radius: 3px;
-        line-height: 1.25rem;
-        padding: 0.5rem 1rem;
-      }
-
-      .secondary-panel .line::before {
-        content: counter(step);
-        counter-increment: step;
-        width: 1rem;
-        margin-right: 1.5rem;
-        display: inline-block;
-        text-align: right;
-        color: rgba(115,138,148,.4)
-      }
-
-      .secondary-panel .environment-details {
-        color: #131313;
+      .card {
+        background: #ffffff;
+        border-radius: 0.5rem;
+        border: 2px solid var(--color-neutral-300);
         padding: 2rem;
       }
 
-      .highlighted-line {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.1);
-        width: 100%;
-      }
-
-      .secondary-panel .highlighted-line::before {
-        color: rgba(255,255,255,.8);
-      }
-
-      .stack {
-        font-size: 0.875rem;
-      }
-
-      .stack ol {
-        margin: 0;
-        padding: 0;
-      }
-
-      .stack h3 {
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 1rem 2rem;
-      }
-
       .stack-line {
-        counter-increment: countdown -1;
-        color: #666666;
-        display: grid;
-        grid-template-columns: 2.5rem auto;
-        align-items: center;
-        font-family: monospace, sans-serif;
-        font-weight: 400;
-        font-style: normal;
-        background: rgba(255, 255, 255, 0.025);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 1rem 2rem;
-      }
-
-      .stack-line:before {
-        content: counter(countdown);
-        width: 1rem;
-        display: inline-block;
-        text-align: right;
-        color: rgba(115,138,148,.4);
-        word-wrap: none;
-      }
-
-      .stack-line:hover {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .stack-line-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        overflow: hidden;
-      }
-
-      .stack-line-content {
-        word-wrap: break-word;
-        overflow-x: scroll;
-      }
-
-      .stack-line-method {
-        color: rgba(255, 255, 255, 0.8);
-        font-family: monospace;
-        margin-bottom: 0.5rem;
-      }
-
-      .stack-line strong {
-        color: #3a9d95;
-      }
-
-      .shiki {
-        overflow-x: auto;
-        border-radius: 4px;
-        border: 1px solid #3c3c3c;
-        max-width: 100%;
-        background: #212121;
-      }
-
-      .shiki pre {
-        margin: 0;
-        background: transparent;
-      }
-
-      .shiki code {
-        display: block;
-      }
-
-      .shiki code .line {
-        counter-increment: line;
-        line-height: 1.6rem;
-      }
-
-      .shiki code .line::before {
-        content: counter(line);
-        flex-shrink: 0;
-        text-align: right;
-        color: #858585;
-        user-select: none;
-        background: #212121;
-      }
-
-      .shiki code .highlighted-line {
-        background: rgba(255, 255, 0, 0.1);
-      }
-
-      .shiki code .highlighted-line::before {
-        background: rgba(255, 255, 0, 0.1);
-        color: #ffffff;
-      }
-
-      .environment-details h2 {
-        margin-bottom: 1rem;
-      }
-
-      .environment-details h3 {
-        margin-bottom: 1rem;
-      }
-
-      .environment-details h4 {
-        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--color-neutral-300);
+        padding: 1rem 0;
       }
 
       .key-value {
         align-items: center;
-        border-bottom: 1px solid #dedede;
+        border-bottom: 1px solid var(--color-neutral-300);
         display: flex;
+        padding: 1rem 0;
         gap: 1.5rem;
-        padding: 0.5rem 0;
       }
 
       .key-value .key {
@@ -280,28 +106,52 @@
       }
 
       .key-value .value {
-        font-style: italic;
-        overflow: hidden;
         word-wrap: break-word;
+        overflow: hidden;
+      }
+
+      .file-details {
+        margin-bottom: 1rem;
+      }
+
+      .code-window {
+        border: 1px solid var(--color-neutral-300);
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
       }
     </style>
   </head>
   
   <body>
+    <header class="title container">
+      <h1>
+        {{ if context.response.status }}
+          {{ context.response.status }} - 
+        {{ /if }}
+        {{ name }}
+      </h1>
+      <div class="subtitle">{{ message }}</div>
+    </header>
+  
     <main class="container">
-      <section class="primary-panel">
-        <div class="title">
-          <h1>
-            {{ if context.response.status }}
-              {{ context.response.status }} - 
-            {{ /if }}
-            {{ name }}
-          </h1>
-          <div class="subtitle">{{ message }}</div>
-        </div>
+        <details class="code-container card" open>
+          <summary>File</summary>
 
-        <div class="stack">
-          <h3>Stack trace ({{ stack.lines.length }})</h3>
+          <div class="file-details">
+            <div class="path">{{ stack.lines[0].file }}</div>
+            <div class="open">
+              <a href="vscode://file/{{ stack.lines[0].file }}">Open</a>
+            </div>
+          </div>
+
+          <div class="code-window">
+            {{ code }}
+          </div>
+        </details>
+
+        <details class="stack card" open>
+          <summary>Stack trace ({{ stack.lines.length }})</summary>
 
           <ol style="counter-reset: countdown {{ stack.lines.length + 1 }}">
             {{ for line of stack.lines }}
@@ -321,25 +171,10 @@
               </li>
             {{ /for }}
           </ol>
-        </div>
-      </div>
+        </details>
 
-      <section class="secondary-panel" style="counter-increment: step {{ stack.lines[0].line - 10 }}">
-        <div class="code-container">
-          <div class="file-details">
-            <div class="path">{{ stack.lines[0].file }}</div>
-            <div class="open">
-              <a href="vscode://file/{{ stack.lines[0].file }}">Open</a>
-            </div>
-          </div>
-
-          <div class="code-window">
-            {{ code }}
-          </div>
-        </div>
-
-        <div class="environment-details">
-          <h2>Context</h2>
+        <details class="environment-details card" open>
+          <summary>Context</summary>
 
           <h3>Request</h3>
 
@@ -351,8 +186,7 @@
               </div>
             {{ /for }}
           </div>
-        </div>
-      </section>
+        </details>
     </main>
   </body>
 </html>
