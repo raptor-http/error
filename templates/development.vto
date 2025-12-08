@@ -1,13 +1,21 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+
     <title>{{ name }} - {{ message }}</title>
     
+    <meta name="viewport" content="width=device-width">
+
+    <meta name="description" content="{{ name }} - {{ message }}">
+
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Recursive:wght@200..900&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Recursive:wght@300..1000&display=swap');
 
       :root {
         color-scheme: light dark;
 
+        /* Neutral Colors */
         --color-pure-white: #ffffff;
         --color-white: #fafcff;
         --color-neutral-50: #f8f9fc;
@@ -21,6 +29,8 @@
         --color-neutral-800: #1e253b;
         --color-neutral-900: #0f152a;
         --color-neutral-950: #020617;
+
+        /* Primary Colors */
         --color-primary: #577c8e;
         --color-primary-50: #f0f7ff;
         --color-primary-100: #e0f0ff;
@@ -32,13 +42,15 @@
         --color-primary-700: #004166;
         --color-primary-800: #002633;
         --color-primary-900: #001319;
-        --color-primary-950: #000a0d;    
+        --color-primary-950: #000a0d;
 
-        --background-color: #F0F3F8;
-        --card-background-color: #FBFCFF;
+        /* Semantic Colors */
+        --background-color: #f0f3f8;
+        --card-background-color: #fbfcff;
         --code-window-background-color: var(--color-pure-white);
-        --border-color: #DCE0EB;
+        --border-color: #dce0eb;
         --font-color: var(--color-neutral-600);
+        --subtle-font-color: var(--color-neutral-400);
         --heading-color: var(--color-neutral-950);
         --primary-accent-color: var(--color-primary-400);
         --code-highlight-background-color: var(--color-neutral-100);
@@ -47,11 +59,12 @@
       @media (prefers-color-scheme: dark) {
         :root {
           --background-color: #010616;
-          --card-background-color: #0A0F1C;
+          --card-background-color: #0a0f1c;
           --code-window-background-color: var(--background-color);
           --border-color: var(--color-neutral-700);
-          --font-color: var(--color-neutral-400);
-          --heading-color: var(--color-neutral-50);
+          --font-color: var(--color-neutral-300);
+          --subtle-font-color: var(--color-neutral-400);
+          --heading-color: var(--color-neutral-200);
           --code-highlight-background-color: var(--color-neutral-800);
           --primary-accent-color: var(--color-primary-300);
         }
@@ -63,34 +76,53 @@
         }
       }
 
+      /* Base Styles */
+
       * {
         box-sizing: border-box;
-        -webkit-font-smoothing: antialiased;
       }
 
       body {
+        padding: 2.5rem;
         background: var(--background-color);
         color: var(--font-color);
+        font-family: "Recursive", sans-serif;
         font-size: 16px;
-        font-family: "Recursive", monospace;
+        font-optical-sizing: auto;
+        font-style: normal;
         font-weight: 300;
-        padding: 2.5rem;
+        font-variation-settings: "slnt" 0, "CASL" 0, "CRSV" 0.5, "MONO" 0;
       }
 
-      h1, h2, h3, h4 {
-        font-family: "Sorts Mill Goudy", serif;
-        color: var(--heading-color);
+      /* Typography */
+
+      h1,
+      h2,
+      h3,
+      h4 {
         margin: 0 0 1rem;
+        color: var(--heading-color);
+        font-family: "Besley", serif;
       }
 
       h1 {
-        font-size: 2.5rem;
-        margin: 0 0 1rem;
+        margin: 0 0 0.5rem;
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      h2 {
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 1.25rem;
+        font-weight: 400;
       }
 
       h3 {
         font-weight: 400;
       }
+
+      /* Layout */
 
       .container {
         width: 100%;
@@ -106,114 +138,135 @@
         margin-bottom: 2rem;
       }
 
+      main details::marker {
+        color: var(--color-neutral-400);
+        font-size: 1rem;
+      }
+
       main details summary {
-        cursor: pointer;
         color: var(--heading-color);
-        font-family: "Sorts Mill Goudy", serif;
+        font-family: "Besley", serif;
         font-size: 1.25rem;
+        cursor: pointer;
       }
 
       main details:open summary {
         margin-bottom: 1.5rem;
       }
 
+      /* Components */
+
+      /* Card Component */
       .card {
-        background: var(--card-background-color);
-        border-radius: 0.5rem;
-        border: 2px solid var(--border-color);
         padding: 1.5rem;
+        border: 2px solid var(--border-color);
+        border-radius: 0.5rem;
+        background: var(--card-background-color);
       }
 
+      /* Stack Component */
       .stack ol {
         margin: 0;
         padding: 0;
       }
 
       .stack-line-container {
-        align-items: center;
         display: flex;
-        gap: 1rem;
+        align-items: center;
         justify-content: space-between;
+        gap: 1rem;
         overflow: hidden;
       }
 
       .stack-line {
-        counter-increment: countdown -1;
         display: grid;
         grid-template-columns: 2.5rem auto;
         align-items: center;
-        border-bottom: 1px solid var(--border-color);
         padding: 1rem 0;
+        border-bottom: 1px solid var(--border-color);
+        counter-increment: countdown -1;
       }
 
-      .stack-line:before {
+      .stack-line::before {
         content: counter(countdown);
-        width: 1rem;
         display: inline-block;
+        width: 1rem;
+        color: var(--heading-color);
         text-align: right;
-        color: var(--font-color);
       }
 
       .stack-line:last-of-type {
-        border: none;
         padding-bottom: 0;
+        border: none;
       }
 
       .stack-line-content {
-        word-wrap: break-word;
         overflow-x: scroll;
+        word-wrap: break-word;
       }
 
       .stack-line-position {
         color: var(--primary-accent-color);
       }
 
+      /* Key-Value Component */
       .key-value {
-        align-items: center;
-        border-bottom: 1px solid var(--border-color);
         display: flex;
-        padding: 1rem 0;
+        align-items: center;
         gap: 1.5rem;
+        padding: 1rem 0;
+        border-bottom: 1px dashed var(--border-color);
+      }
+
+      .key-value:first-of-type {
+        padding-top: 0;
       }
 
       .key-value:last-of-type {
-        border: none;
         padding-bottom: 0;
+        border: none;
       }
 
       .key-value .key {
+        min-width: 220px;
+        overflow: hidden;
         color: var(--heading-color);
         font-weight: 700;
-        min-width: 200px;
+        word-wrap: break-word;
       }
 
       .key-value .value {
-        word-wrap: break-word;
         overflow: hidden;
         font-style: italic;
+        word-wrap: break-word;
       }
 
+      @media screen and (max-width: 720px) {
+        .key-value {
+          display: grid;
+        }
+      }
+
+      /* File Details Component */
       .file-details {
-        align-items: center;
         display: flex;
-        gap: 1.5rem;
+        align-items: center;
         justify-content: space-between;
+        gap: 1.5rem;
         margin-bottom: 1rem;
       }
 
+      .file-details .open svg {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+
       .file-details .open a {
-        border-radius: 0.25rem;
-        border: 2px solid var(--border-color);
-        color: var(--color-neutral-500);
-        display: block;
-        font-weight: 600;
-        padding: 0.25rem 1rem;
-        text-decoration: none;
+        color: var(--font-color);
       }
 
       .file-details .open a:hover {
-        border-color: var(--color-neutral-500);
-        color: var(--color-neutral-500);
+        color: var(--primary-accent-color);
       }
 
       .file-details .path {
@@ -221,12 +274,13 @@
         word-wrap: break-word;
       }
 
+      /* Code Window Component */
       .code-window {
-        counter-reset: step;
-        background: var(--code-window-background-color);
+        padding: 0 1rem;
         border: 1px solid var(--border-color);
         border-radius: 0.5rem;
-        padding: 0 1rem;
+        background: var(--code-window-background-color);
+        counter-reset: step;
         font-size: 1rem;
       }
 
@@ -243,12 +297,12 @@
 
       .code-window .line::before {
         content: counter(step);
-        counter-increment: step;
+        display: inline-block;
         width: 1rem;
         margin-right: 1.5rem;
-        display: inline-block;
-        text-align: right;
         color: var(--font-color);
+        text-align: right;
+        counter-increment: step;
       }
 
       .code-window .highlighted-line,
@@ -262,8 +316,24 @@
       }
 
       .shiki {
-        overflow-x: auto;
         max-width: 100%;
+        overflow-x: auto;
+      }
+
+      /* Environment Details Component */
+      .environment-details > div {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.25rem;
+      }
+
+      /* Utility Classes */
+
+      .notice {
+        color: var(--subtle-font-color);
+        font-size: 0.875rem;
+        text-align: center;
       }
     </style>
   </head>
@@ -277,18 +347,22 @@
         {{ name }}
       </h1>
       <div class="subtitle">
-        <em>{{ message }}</em>
+        {{ message }}
       </div>
     </header>
   
     <main class="container">
         <details class="code-container card" open>
-          <summary>File</summary>
+          <summary>&nbsp;Originating file</summary>
 
           <div class="file-details">
             <div class="path">{{ stack.lines[0].file }}</div>
             <div class="open">
-              <a href="vscode://file/{{ stack.lines[0].file }}">Open</a>
+              <a href="vscode://file/{{ stack.lines[0].file }}" title="Open in code editor">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75 16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                </svg>
+              </a>
             </div>
           </div>
 
@@ -298,7 +372,7 @@
         </details>
 
         <details class="stack card" open>
-          <summary>Stack trace ({{ stack.lines.length }})</summary>
+          <summary>&nbsp;Stack trace ({{ stack.lines.length }})</summary>
 
           <ol style="counter-reset: countdown {{ stack.lines.length + 1 }}">
             {{ for line of stack.lines }}
@@ -312,7 +386,7 @@
                     {{ line.file }}
                   </div>
                   <div class="stack-line-position">
-                    <em>{{ line.line }}:{{ line.col }}</em>
+                    {{ line.line }}:{{ line.col }}
                   </div>
                 </div>
               </li>
@@ -321,11 +395,27 @@
         </details>
 
         <details class="environment-details card" open>
-          <summary>Context</summary>
+          <summary>&nbsp;Context</summary>
 
-          <h3>Request</h3>
+          <h2>Request</h2>
 
-          <div class="request-headers">
+          <h3>Details</h3>
+
+          <div class="request-details">
+            <div class="key-value">
+              <div class="key">URL</div>
+              <div class="value">{{ context.request.url }}</div>
+            </div>
+
+            <div class="key-value">
+              <div class="key">Method</div>
+              <div class="value">{{ context.request.method }}</div>
+            </div>
+          </div>
+          
+          <h3>Headers</h3>
+
+          <div class="request-headers">        
             {{ for key, value of context.request.headers }}
               <div class="key-value">
                 <div class="key">{{ key }}</div>
@@ -334,6 +424,10 @@
             {{ /for }}
           </div>
         </details>
+
+        <div class="notice">
+          <p>This error has been caught using the @raptor/error extension.</p>
+        </div>
     </main>
   </body>
 </html>
