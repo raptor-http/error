@@ -10,11 +10,7 @@
     <meta name="description" content="{{ name }} - {{ message }}">
 
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Recursive:wght@300..1000&display=swap');
-
       :root {
-        color-scheme: light dark;
-
         /* Neutral Colors */
         --color-pure-white: #ffffff;
         --color-white: #fafcff;
@@ -44,36 +40,16 @@
         --color-primary-900: #001319;
         --color-primary-950: #000a0d;
 
-        /* Semantic Colors */
-        --background-color: #f0f3f8;
-        --card-background-color: #fbfcff;
-        --code-window-background-color: var(--color-pure-white);
-        --border-color: #dce0eb;
-        --font-color: var(--color-neutral-600);
+        --background-color: #010616;
+        --card-background-color: #0a0f1c;
+        --code-window-background-color: var(--background-color);
+        --border-color: var(--color-neutral-800);
+        --font-color: var(--color-neutral-300);
+        --font-family: -apple-system, "system-ui", "segoe ui", Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji";
         --subtle-font-color: var(--color-neutral-400);
-        --heading-color: var(--color-neutral-950);
-        --primary-accent-color: var(--color-primary-400);
-        --code-highlight-background-color: var(--color-neutral-100);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --background-color: #010616;
-          --card-background-color: #0a0f1c;
-          --code-window-background-color: var(--background-color);
-          --border-color: var(--color-neutral-700);
-          --font-color: var(--color-neutral-300);
-          --subtle-font-color: var(--color-neutral-400);
-          --heading-color: var(--color-neutral-200);
-          --code-highlight-background-color: var(--color-neutral-800);
-          --primary-accent-color: var(--color-primary-300);
-        }
-
-        .shiki,
-        .shiki span {
-          color: var(--shiki-dark) !important;
-          background-color: var(--background-color) !important;
-        }
+        --heading-color: var(--color-neutral-200);
+        --code-highlight-background-color: var(--color-neutral-800);
+        --primary-accent-color: var(--color-primary-300);
       }
 
       /* Base Styles */
@@ -86,7 +62,7 @@
         padding: 2.5rem;
         background: var(--background-color);
         color: var(--font-color);
-        font-family: "Recursive", sans-serif;
+        font-family: var(--font-family);
         font-size: 16px;
         font-optical-sizing: auto;
         font-style: normal;
@@ -102,24 +78,18 @@
       h4 {
         margin: 0 0 1rem;
         color: var(--heading-color);
-        font-family: "Besley", serif;
+        font-weight: 700;
       }
 
       h1 {
         margin: 0 0 0.5rem;
         font-size: 2rem;
-        font-weight: 700;
       }
 
       h2 {
         padding-bottom: 0.75rem;
         border-bottom: 1px solid var(--border-color);
         font-size: 1.25rem;
-        font-weight: 400;
-      }
-
-      h3 {
-        font-weight: 400;
       }
 
       /* Layout */
@@ -145,8 +115,8 @@
 
       main details summary {
         color: var(--heading-color);
-        font-family: "Besley", serif;
         font-size: 1.25rem;
+        font-weight: 600;
         cursor: pointer;
       }
 
@@ -159,9 +129,8 @@
       /* Card Component */
       .card {
         padding: 1.5rem;
-        border: 2px solid var(--border-color);
+        border: 1px solid var(--border-color);
         border-radius: 0.5rem;
-        background: var(--card-background-color);
       }
 
       /* Stack Component */
@@ -247,6 +216,11 @@
         }
       }
 
+      /* Errors */
+      .errors ul {
+        margin: 0;
+      }
+
       /* File Details Component */
       .file-details {
         display: flex;
@@ -276,10 +250,6 @@
 
       /* Code Window Component */
       .code-window {
-        padding: 0 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
-        background: var(--code-window-background-color);
         counter-reset: step;
         font-size: 1rem;
       }
@@ -307,17 +277,20 @@
 
       .code-window .highlighted-line,
       .code-window .highlighted-line span {
-        background: var(--code-highlight-background-color) !important;
+        background: var(--color-neutral-800) !important;
       }
 
       .code-window .line:hover,
       .code-window .line:hover span {
-        background: var(--code-highlight-background-color) !important;
+        background: var(--color-neutral-800) !important;
       }
 
-      .shiki {
-        max-width: 100%;
-        overflow-x: auto;
+      pre.shiki, .defaultStyles pre.shiki {
+        border: 1px solid var(--color-neutral-700);
+        background: var(--color-neutral-900) !important;
+        border-radius: .5rem;
+        padding: 1rem;
+        overflow: scroll;
       }
 
       /* Environment Details Component */
@@ -352,11 +325,27 @@
     </header>
   
     <main class="container">
+        {{ if errors }}
+        <details class="errors card" open>
+          <summary>&nbsp;Errors {{ it.errors.length }}</summary>
+          
+          <ul>
+          {{ for error of errors }}
+            {{ for message of error }}
+              <li>{{ message }}</li>
+            {{ /for }}
+          {{ /for }}
+          </ul>
+        </details>
+        {{ /if }}
+
         <details class="code-container card" open>
           <summary>&nbsp;Originating file</summary>
 
           <div class="file-details">
-            <div class="path">{{ stack.lines[0].file }}</div>
+            <div class="path">
+              <em>{{ stack.lines[0].file }}</em>
+            </div>
             <div class="open">
               <a href="vscode://file/{{ stack.lines[0].file }}" title="Open in code editor">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

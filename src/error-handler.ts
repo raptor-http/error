@@ -143,6 +143,7 @@ export default class ErrorHandler {
       },
       name: error.name,
       message: error.message,
+      errors: error.errors ?? [],
       stack: {
         raw: error.stack,
         lines: stackLines,

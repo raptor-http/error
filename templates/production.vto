@@ -3,16 +3,12 @@
     <title>{{ name }} - {{ message }}</title>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Recursive:wght@200..900&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
-
       * {
         box-sizing: border-box;
         -webkit-font-smoothing: antialiased;
       }
 
       :root {
-        color-scheme: light dark;
-
         --color-pure-white: #ffffff;
         --color-white: #fafcff;
         --color-neutral-50: #f8f9fc;
@@ -39,25 +35,18 @@
         --color-primary-900: #001319;
         --color-primary-950: #000a0d; 
 
-        --background-color: #F0F3F8;
-        --font-color: var(--color-neutral-600);
-        --heading-color: var(--color-neutral-950);
-      }
-      
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --background-color: #010616;
-          --font-color: var(--color-neutral-400);
-          --heading-color: var(--color-neutral-50);
-          --color-primary: var(--color-primary-400);
-        }
+        --background-color: #010616;
+        --font-color: var(--color-neutral-400);
+        --font-family: -apple-system, "system-ui", "segoe ui", Helvetica, Arial, sans-serif, "apple color emoji", "segoe ui emoji";
+        --heading-color: var(--color-neutral-50);
+        --color-primary: var(--color-primary-400);
       }
 
       body {
         background: var(--background-color);
         color: var(--font-color);
         font-size: 16px;
-        font-family: "Recursive", monospace;
+        font-family: var(--font-family);
         font-weight: 300;
         height: 100%;
         margin: 0;
@@ -66,7 +55,6 @@
 
       h1, h2, h3, h4 {
         color: var(--heading-color);
-        font-family: "Sorts Mill Goudy", serif;
         margin: 0;
       }
 

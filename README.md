@@ -13,11 +13,6 @@
 
 See more information about the Raptor framework here: <a href="https://jsr.io/@raptor/framework">https://jsr.io/@raptor/framework</a>.
 
-## Usage
-
-> [!NOTE]
-> This is currently under heavy development and is not yet suitable for production use. Please proceed with caution.
-
 ## Installation
 
 To start using the error handling, simply install into an existing Raptor application via the CLI or import it directly from JSR.
@@ -33,28 +28,9 @@ deno add jsr:@raptor/error
 Raptor is also available to import directly via JSR:
 [https://jsr.io/@raptor/error](https://jsr.io/@raptor/error)
 
-## Usage
+## Documentation
 
-The error handler supports both development and production mode.
-
-```ts
-import { ErrorHandler } from "jsr:@raptor/error";
-import { Kernel, Context } from "jsr:@raptor/framework";
-
-const app = new Kernel();
-
-const handler = new ErrorHandler({
-  env: "development"
-});
-
-app.add(() => "Hello, Dr Malcolm!");
-
-app.catch((error: Error, context: Context) => {
-  return handler.handle(error, context)
-});
-
-app.serve({ port: 8000 });
-```
+Full documentation can be found on [https://raptorframework.com/docs](https://raptorframework.com/docs).
 
 ## License
 
