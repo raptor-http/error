@@ -1,8 +1,4 @@
-import {
-  type Context,
-  type Error,
-  ServerError,
-} from "jsr:@raptor/framework@0.8.2";
+import { type Context, type Error, ServerError } from "jsr:@raptor/framework";
 
 import CodeExtractor from "./code-extractor.ts";
 import CodeHighlighter from "./code-highlighter.ts";
