@@ -4,9 +4,9 @@
 
 <p align="center">
   <a href="https://github.com/raptor-http/error/actions"><img src="https://github.com/raptor-http/error/workflows/ci/badge.svg" alt="Build Status"></a>
-  <a href="jsr.io/@raptor/error"><img src="https://jsr.io/badges/@raptor/error?logoColor=3A9D95&color=3A9D95&labelColor=083344" /></a>
-  <a href="jsr.io/@raptor/error score"><img src="https://jsr.io/badges/@raptor/error/score?logoColor=3A9D95&color=3A9D95&labelColor=083344" /></a>
-  <a href="https://jsr.io/@raptor"><img src="https://jsr.io/badges/@raptor?logoColor=3A9D95&color=3A9D95&labelColor=083344" alt="" /></a>
+  <a href="jsr.io/@raptor/error"><img src="https://jsr.io/badges/@raptor/error" /></a>
+  <a href="jsr.io/@raptor/error score"><img src="https://jsr.io/badges/@raptor/error/score" /></a>
+  <a href="https://jsr.io/@raptor"><img src="https://jsr.io/badges/@raptor" alt="" /></a>
 </p>
 
 ## Raptor Error
