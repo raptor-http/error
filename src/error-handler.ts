@@ -1,8 +1,8 @@
 import {
-  type Context,
-  type Error,
   ServerError,
-} from "jsr:@raptor/framework@0.9.0";
+  type Context,
+  type Error as RaptorError,
+} from "@raptor/framework";
 
 import CodeExtractor from "./code-extractor.ts";
 import CodeHighlighter from "./code-highlighter.ts";
@@ -54,8 +54,72 @@ export default class ErrorHandler {
    * @param context The current http context.
    * @returns An HTTP response object.
    */
-  public async handle(error: Error, context: Context): Promise<Response> {
-    this.stackProcessor.addStackData(error.stack as string);
+  public handle(context: Context): Promise<Response> {
+    if (!context.error) {
+      throw new ServerError("No error was available in the context");
+    }
+
+    return this.transformResponse(context);
+  }
+
+  /**
+   * Transform the response based on request content type and accept headers.
+   *
+   * @param error The error in the request.
+   * @param context The context of the request.
+   * @returns A valid response object in appropriate content type.
+   */
+  private async transformResponse(context: Context): Promise<Response> {
+    if (!context.error) {
+      throw new ServerError("No error was available in the context");
+    }
+
+    const { error } = context;
+
+    const contentType = context.detectAppropriateContentType();
+
+    const status = "status" in error ? error.status : 500;
+    const errors = "errors" in error ? error.errors : undefined;
+
+    let body;
+
+    switch (contentType) {
+      case "application/json":
+        body = JSON.stringify({
+          name: error.name,
+          message: error.message,
+          status,
+          errors,
+        });
+        break;
+
+      case "text/html":
+        body = await this.prepareHtmlBody(context);
+        break;
+
+      case "text/plain":
+      default:
+        body = `${error.name} - ${error.message}`;
+        break;
+    }
+
+    context.response.headers.set(
+      "content-type",
+      `${contentType}; charset=utf-8`,
+    );
+
+    return new Response(body, {
+      status: "status" in error ? error.status : 500,
+      headers: context.response.headers,
+    });
+  }
+
+  private async prepareHtmlBody(context: Context): Promise<string> {
+    if (!context.error) {
+      throw new ServerError("No error was available in the context");
+    }
+    
+    this.stackProcessor.addStackData(context.error.stack as string);
 
     const stackLines = this.stackProcessor.process();
 
@@ -63,8 +127,8 @@ export default class ErrorHandler {
       throw new ServerError();
     }
 
-    let extraction = null;
     let path = null;
+    let extraction = null;
     let highlightLine = 1;
 
     for (const stackLine of stackLines) {
@@ -99,16 +163,10 @@ export default class ErrorHandler {
 
     const template = await this.templateRenderer.render(
       templatePath.href,
-      this.prepareResponsePayload(code, error, context, stackLines),
+      this.prepareResponsePayload(code, context.error, context, stackLines),
     );
 
-    return new Response(template.content, {
-      status: error.status ?? 500,
-      headers: {
-        ...context.response.headers,
-        "Content-Type": "text/html",
-      },
-    });
+    return template.content;
   }
 
   /**
@@ -122,7 +180,7 @@ export default class ErrorHandler {
    */
   private prepareResponsePayload(
     code: string,
-    error: Error,
+    error: RaptorError | Error,
     context: Context,
     stackLines: StackTraceItem[],
   ) {
@@ -138,12 +196,12 @@ export default class ErrorHandler {
           ),
         },
         response: {
-          status: error.status,
+          status: "status" in error ? error.status : 500,
         },
       },
       name: error.name,
       message: error.message,
-      errors: error.errors ?? [],
+      errors: "errors" in error ? error.errors : [],
       stack: {
         raw: error.stack,
         lines: stackLines,

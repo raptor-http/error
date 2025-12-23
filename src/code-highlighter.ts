@@ -1,4 +1,4 @@
-import { codeToHtml } from "npm:shiki@3.19.0";
+import { codeToHtml } from "shiki";
 
 /**
  * The code highlighter.

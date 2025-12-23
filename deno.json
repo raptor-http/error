@@ -1,6 +1,6 @@
 {
   "name": "@raptor/error",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "exports": "./mod.ts",
   "publish": {
     "exclude": [
@@ -19,5 +19,10 @@
       "README.md"
     ]
   },
-  "lock": false
+  "lock": true,
+  "imports": {
+    "shiki": "npm:shiki@3.19.0",
+    "ventojs": "npm:ventojs@2.2.0",
+    "@raptor/framework": "jsr:@raptor/framework@0.13.0"
+  }
 }

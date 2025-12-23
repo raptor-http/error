@@ -1,6 +1,6 @@
-import vento from "npm:ventojs@2.2.0";
-import { ServerError } from "jsr:@raptor/framework@0.8.2";
-import type { TemplateResult } from "npm:ventojs@2.2.0/core/environment.js";
+import vento from "ventojs";
+import { ServerError } from "@raptor/framework";
+import type { TemplateResult } from "ventojs/core/environment.js";
 
 /**
  * The error template renderer.
