@@ -26,7 +26,7 @@ Deno.test("error handler throws when no error in context", async () => {
   await assertRejects(
     async () => await handler.handle(context),
     ServerError,
-    "No error was available in the context"
+    "No error was available in the context",
   );
 });
 
@@ -86,7 +86,7 @@ Deno.test("error handler handles custom status codes", async () => {
     name: "NotFoundError",
     message: "Resource not found",
     status: 404,
-    stack: "Error stack"
+    stack: "Error stack",
   };
 
   const context = {
@@ -117,7 +117,7 @@ Deno.test("error handler includes validation errors", async () => {
     message: "Validation failed",
     status: 422,
     errors: [{ field: "email", message: "Invalid email" }],
-    stack: "Error stack"
+    stack: "Error stack",
   };
 
   const context = {
@@ -164,11 +164,16 @@ Deno.test("error handler creates correct structure", () => {
       method: "test",
       file: "/test.ts",
       line: 1,
-      col: 1
-    }
+      col: 1,
+    },
   ];
 
-  const payload = handler["prepareResponsePayload"](code, error, context, stackLines);
+  const payload = handler["prepareResponsePayload"](
+    code,
+    error,
+    context,
+    stackLines,
+  );
 
   assertEquals(payload.code, code);
   assertEquals(payload.name, "Error");
