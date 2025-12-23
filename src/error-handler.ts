@@ -1,7 +1,7 @@
 import {
-  ServerError,
   type Context,
   type Error as RaptorError,
+  ServerError,
 } from "@raptor/framework";
 
 import CodeExtractor from "./code-extractor.ts";
@@ -118,7 +118,7 @@ export default class ErrorHandler {
     if (!context.error) {
       throw new ServerError("No error was available in the context");
     }
-    
+
     this.stackProcessor.addStackData(context.error.stack as string);
 
     const stackLines = this.stackProcessor.process();
