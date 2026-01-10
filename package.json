@@ -1,6 +1,6 @@
 {
   "name": "@raptor-http/error",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "description": "The first-party error handler for Raptor.",
   "exports": "./mod.ts",
