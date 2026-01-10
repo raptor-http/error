@@ -1,0 +1,50 @@
+{
+  "name": "@raptor-http/error",
+  "version": "0.8.0",
+  "type": "module",
+  "description": "The first-party error handler for Raptor.",
+  "exports": "./mod.ts",
+  "files": [
+    "mod.ts",
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
+  ],
+  "keywords": [
+    "framework",
+    "middleware",
+    "http",
+    "deno",
+    "bun",
+    "nodejs",
+    "web-framework",
+    "router",
+    "validation",
+    "error",
+    "error-handling"
+  ],
+  "author": "Bri Ward",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raptor-http/validator.git"
+  },
+  "homepage": "https://github.com/raptor-http/validator#readme",
+  "bugs": {
+    "url": "https://github.com/raptor-http/validator/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "private": false,
+  "dependencies": {
+    "@raptor/framework": "npm:@raptor-http/framework@^0.14.4",
+    "shiki": "^3.21.0",
+    "ventojs": "^2.3.0"
+  }
+}

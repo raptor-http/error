@@ -1,4 +1,7 @@
-import CodeHighlighter from "../src/code-highlighter.ts";
+/// <reference lib="deno.ns" />
+// deno-lint-ignore-file
+
+import CodeHighlighter from "../src/code/highlighter.ts";
 import { assertEquals, assertExists, assertRejects } from "@std/assert";
 
 Deno.test("code highlighter creates instance", () => {

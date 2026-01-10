@@ -1,4 +1,7 @@
-import StackProcessor from "../src/stack-processor.ts";
+/// <reference lib="deno.ns" />
+// deno-lint-ignore-file
+
+import StackProcessor from "../src/stack/processor.ts";
 import { assertEquals, assertExists } from "@std/assert";
 
 Deno.test("stack processor creates instance", () => {

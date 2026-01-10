@@ -1,12 +1,27 @@
 import vento from "ventojs";
 import { ServerError } from "@raptor/framework";
-import type { TemplateResult } from "ventojs/core/environment.js";
+import FileSystem from "../filesystem/manager.ts";
+import type { Environment, TemplateResult } from "ventojs/core/environment.js";
 
-/**
- * The error template renderer.
- */
 export default class TemplateRenderer {
-  private templating = vento();
+  /**
+   * The template environment from Vento.
+   */
+  private templating: Environment;
+
+  /**
+   * The filesystem manager.
+   */
+  private fileSystem: FileSystem;
+
+  /**
+   * Initialises the template renderer.
+   */
+  constructor() {
+    this.templating = vento();
+
+    this.fileSystem = new FileSystem();
+  }
 
   /**
    * Render the template with context.
@@ -72,11 +87,11 @@ export default class TemplateRenderer {
    * @param pathname The path to the template file.
    * @returns The template file contents.
    */
-  private async readLocalTemplate(pathname: string): Promise<string> {
+  private readLocalTemplate(pathname: string): string | Promise<string> {
     try {
       const url = new URL(pathname, import.meta.url);
 
-      return await Deno.readTextFile(url);
+      return this.fileSystem.readTextFile(url);
     } catch {
       throw new ServerError(`Template file not found: ${pathname}`);
     }

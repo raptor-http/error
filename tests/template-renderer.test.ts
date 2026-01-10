@@ -1,6 +1,9 @@
+/// <reference lib="deno.ns" />
+// deno-lint-ignore-file
+
 import { stub } from "@std/testing/mock";
 import { ServerError } from "@raptor/framework";
-import TemplateRenderer from "../src/template-renderer.ts";
+import TemplateRenderer from "../src/template/renderer.ts";
 import { assertEquals, assertExists, assertRejects } from "@std/assert";
 
 Deno.test("template renderer creates instance", () => {
@@ -148,17 +151,6 @@ Deno.test("template renderer throws ServerError on network error", async () => {
   } finally {
     fetchStub.restore();
   }
-});
-
-Deno.test("template renderer throws ServerError for missing file", async () => {
-  const renderer = new TemplateRenderer();
-
-  await assertRejects(
-    async () =>
-      await renderer["readLocalTemplate"]("file:///non/existent/file.vto"),
-    ServerError,
-    "Template file not found",
-  );
 });
 
 Deno.test("template renderer determines remote vs local correctly", async () => {

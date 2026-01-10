@@ -1,5 +1,8 @@
+/// <reference lib="deno.ns" />
+// deno-lint-ignore-file
+
 import { stub } from "@std/testing/mock";
-import CodeExtractor from "../src/code-extractor.ts";
+import CodeExtractor from "../src/code/extractor.ts";
 import { assertEquals, assertExists } from "@std/assert";
 
 Deno.test("code extractor sets default offset", () => {

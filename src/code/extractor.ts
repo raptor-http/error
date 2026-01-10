@@ -1,3 +1,5 @@
+import FileSystem from "../filesystem/manager.ts";
+
 interface Snippet {
   snippet: string;
   decorationLine: number;
@@ -9,11 +11,18 @@ interface Snippet {
  */
 export default class CodeExtractor {
   /**
+   * The filesystem manager.
+   */
+  private fileSystem: FileSystem;
+
+  /**
    * Construct a new code extractor.
    *
    * @param codeLineOffset The code line offset.
    */
-  constructor(private codeLineOffset: number = 10) {}
+  constructor(private codeLineOffset: number = 10) {
+    this.fileSystem = new FileSystem();
+  }
 
   /**
    * @param filePath The path to the file.
@@ -82,8 +91,8 @@ export default class CodeExtractor {
    */
   private readLocalFile(filePath: string): string | null {
     try {
-      Deno.statSync(filePath);
-      const data = Deno.readFileSync(filePath);
+      const data = this.fileSystem.readFileSync(filePath);
+
       return new TextDecoder().decode(data).trim();
     } catch {
       return null;
@@ -118,7 +127,9 @@ export default class CodeExtractor {
     highlightLine: number,
   ): Snippet | null {
     const zeroBasedHighlight = highlightLine - 1;
+
     const start = Math.max(0, zeroBasedHighlight - this.codeLineOffset);
+
     const end = Math.min(
       codeLines.length,
       zeroBasedHighlight + this.codeLineOffset + 1,

@@ -1,3 +1,6 @@
+/// <reference lib="deno.ns" />
+// deno-lint-ignore-file
+
 import { ErrorHandler } from "../mod.ts";
 import { assertEquals, assertRejects } from "@std/assert";
 import { type Context, ServerError } from "@raptor/framework";

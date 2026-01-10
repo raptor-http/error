@@ -4,11 +4,11 @@ import {
   ServerError,
 } from "@raptor/framework";
 
-import CodeExtractor from "./code-extractor.ts";
-import CodeHighlighter from "./code-highlighter.ts";
-import TemplateRenderer from "./template-renderer.ts";
-import type { ErrorHandlerOptions } from "./error-handler-options.ts";
-import StackProcessor, { type StackTraceItem } from "./stack-processor.ts";
+import CodeExtractor from "./code/extractor.ts";
+import CodeHighlighter from "./code/highlighter.ts";
+import TemplateRenderer from "./template/renderer.ts";
+import StackProcessor, { type StackTraceItem } from "./stack/processor.ts";
+import type { ErrorHandlerOptions } from "./interfaces/error-handler-options.ts";
 
 /**
  * The error handler middleware.
