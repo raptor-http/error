@@ -2,6 +2,7 @@
   "name": "@raptor/error",
   "version": "0.8.0",
   "exports": "./mod.ts",
+  "nodeModulesDir": "auto",
   "compilerOptions": {
     "lib": ["deno.ns", "deno.window"]
   },
