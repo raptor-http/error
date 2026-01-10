@@ -11,22 +11,11 @@
 
 ## Raptor Error
 
-See more information about the Raptor framework here: <a href="https://jsr.io/@raptor/framework">https://jsr.io/@raptor/framework</a>.
+See more information about the Raptor framework here: <a href="https://raptorframework.com">https://raptorframework.com</a>.
 
 ## Installation
 
-To start using the error handling, simply install into an existing Raptor application via the CLI or import it directly from JSR.
-
-### Using the Deno CLI
-
-```
-deno add jsr:@raptor/error
-```
-
-### Importing with JSR
-
-Raptor is also available to import directly via JSR:
-[https://jsr.io/@raptor/error](https://jsr.io/@raptor/error)
+For installation instructions, please visit <a href="https://raptorframework.com/docs/extensions/error">https://raptorframework.com/docs/extensions/error</a>
 
 ## Documentation
 
@@ -34,5 +23,4 @@ Full documentation can be found on [https://raptorframework.com/docs](https://ra
 
 ## License
 
-_Copyright 2025, @briward. All rights reserved. The framework is licensed under
-the MIT license._
+The Raptor framework is licensed under the MIT license.
