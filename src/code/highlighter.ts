@@ -1,4 +1,6 @@
-import { codeToHtml } from "shiki";
+import { codeToHtml, type ThemeRegistration } from "shiki";
+
+import { theme } from "../config/shiki-theme.ts";
 
 /**
  * The code highlighter.
@@ -43,7 +45,7 @@ export default class CodeHighlighter {
 
     return await codeToHtml(snippet, {
       lang: "ts",
-      theme: "github-dark",
+      theme: theme as ThemeRegistration,
       decorations,
     });
   }
