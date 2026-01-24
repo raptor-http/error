@@ -1,6 +1,7 @@
 import {
+  ContentNegotiator,
   type Context,
-  type Error as RaptorError,
+  type HttpError as RaptorError,
   ServerError,
 } from "@raptor/framework";
 
@@ -76,7 +77,7 @@ export default class ErrorHandler {
 
     const { error } = context;
 
-    const contentType = context.detectAppropriateContentType();
+    const contentType = ContentNegotiator.negotiate(context.request);
 
     const status = "status" in error ? error.status : 500;
     const errors = "errors" in error ? error.errors : undefined;
