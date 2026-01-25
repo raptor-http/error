@@ -1,6 +1,7 @@
 import {
   ContentNegotiator,
   type Context,
+  type ErrorHandler,
   type HttpError as RaptorError,
   ServerError,
 } from "@raptor/framework";
@@ -14,7 +15,7 @@ import type { ErrorHandlerOptions } from "./interfaces/error-handler-options.ts"
 /**
  * The error handler middleware.
  */
-export default class ErrorHandler {
+export default class Handler {
   /**
    * The environment on which to handle errors.
    */
@@ -49,13 +50,22 @@ export default class ErrorHandler {
   }
 
   /**
+   * Wrapper to pre-bind this to the error handler method.
+   */
+  public get handle(): ErrorHandler {
+    return (context: Context) => {
+      return this.handleErrors(context);
+    };
+  }
+
+  /**
    * Handle the current http context and process routes.
    *
-   * @param error The error object to handle.
    * @param context The current http context.
+   *
    * @returns An HTTP response object.
    */
-  public handle(context: Context): Promise<Response> {
+  public handleErrors(context: Context): Promise<Response> {
     if (!context.error) {
       throw new ServerError("No error was available in the context");
     }
